@@ -1,0 +1,7 @@
+[0m[[0m[31merror[0m] [0m[0m/Users/asritamandalam/Downloads/CSE512-Project-Phase2-Template-master/src/main/scala/cse512/SparkSQLExample.scala:73:34: value runDistanceQuery is not a member of object cse512.SpatialQuery[0m
+[0m[[0m[31merror[0m] [0m[0m      queryResult = SpatialQuery.runDistanceQuery(spark, queryParam(0), queryParam(1), queryParam(2))[0m
+[0m[[0m[31merror[0m] [0m[0m                                 ^[0m
+[0m[[0m[31merror[0m] [0m[0m/Users/asritamandalam/Downloads/CSE512-Project-Phase2-Template-master/src/main/scala/cse512/SparkSQLExample.scala:78:34: value runDistanceJoinQuery is not a member of object cse512.SpatialQuery[0m
+[0m[[0m[31merror[0m] [0m[0m      queryResult = SpatialQuery.runDistanceJoinQuery(spark, queryParam(0), queryParam(1), queryParam(2))[0m
+[0m[[0m[31merror[0m] [0m[0m                                 ^[0m
+[0m[[0m[31merror[0m] [0m[0mtwo errors found[0m
