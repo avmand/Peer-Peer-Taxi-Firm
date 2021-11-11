@@ -13,18 +13,43 @@ object SpatialQuery extends App{
       return false
     }
     val ptStrSplit = pointString.split(",")
-    val ptX = ptStrSplit(0)
-    val ptY = ptStrSplit(1)
+    val ptX = ptStrSplit(0).toDouble
+    val ptY = ptStrSplit(1).toDouble
     val qRectSplit = queryRectangle.split(",")
-    val upLX = qRectSplit(0)
-    val upLY = qRectSplit(1)
-    val btmRX = qRectSplit(2)
-    val btmRY = qRectSplit(3)
+    print(ptStrSplit(0).toDouble)
+    print("\n")
+    print(qRectSplit(0).toDouble)
+    print("\n")
+    return false
+    //val upLX = qRectSplit(0)
+    //val upLY = qRectSplit(1)
+    //val btmRX = qRectSplit(2)
+    //val btmRY = qRectSplit(3)
 
-    if ((upLX <= ptX) && (ptX <= btmRX) && (upLY <= ptY) && (ptY <= btmRY)) {
+    /*if (((upLX <= ptX) && (ptX <= btmRX) && (upLY >= ptY) && (ptY >= btmRY))||((btmRX >= ptX) && (ptX <= upLX) && (btmRY <= ptY) && (ptY <= upLY))) {
       return true
+    }*/
+    val upX = 0.0
+    val lowX =0.0
+    val upY = 0.0
+    val lowY = 0.0
+    if ( qRectSplit(0) > qRectSplit(2)) {
+      val upX = qRectSplit(0).toDouble
+      val lowX = qRectSplit(2).toDouble
     }
-    else if ((btmRX <= ptX) && (ptX <= upLX) && (btmRY <= ptY) && (ptY <= upLY)) {
+    else{
+      val upX = qRectSplit(2).toDouble
+      val lowX = qRectSplit(0).toDouble
+    }
+
+    if ( qRectSplit(1) > qRectSplit(3)){
+      val upY = qRectSplit(1).toDouble
+      val lowY = qRectSplit(3).toDouble
+    }else {
+      val upY = qRectSplit(3).toDouble
+      val lowY = qRectSplit(1).toDouble
+    }
+    if ((upX >= ptX) && (ptX >= lowX) && (upY >= ptY) && (ptY >= lowY)) {
       return true
     }
     else
@@ -44,6 +69,7 @@ object SpatialQuery extends App{
     val resultDf = spark.sql("select * from point where ST_Contains('"+arg2+"',point._c0)")
     resultDf.show()
     print(resultDf.count())
+    print("\n")
     return resultDf.count()
   }
 
@@ -61,6 +87,7 @@ object SpatialQuery extends App{
     val resultDf = spark.sql("select * from rectangle,point where ST_Contains(rectangle._c0,point._c0)")
     resultDf.show()
     print(resultDf.count())
+    print("\n")
 
     return resultDf.count()
   }

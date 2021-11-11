@@ -5,7 +5,7 @@
 [0m[[0m[33mwarn[0m] [0m[0mMerging '.DS_Store' with strategy 'discard'[0m
 [0m[[0m[33mwarn[0m] [0m[0mMerging 'META-INF/MANIFEST.MF' with strategy 'discard'[0m
 [0m[[0m[33mwarn[0m] [0m[0mStrategy 'discard' was applied to 2 files[0m
-[0m[[0m[0minfo[0m] [0m[0mSHA-1: 5479ad4aa7a3b4636cc7b3b19bde77202d8d0a7d[0m
+[0m[[0m[0minfo[0m] [0m[0mSHA-1: 9caff53dfd06ac2612ccce7fb5c6a0baafcfeeb8[0m
 [0m[[0m[33mwarn[0m] [0m[0mIgnored unknown package option FixedTimestamp(Some(1262304000000))[0m
 [0m[[0m[0mdebug[0m] [0m[0mPackaging /Users/asritamandalam/Downloads/CSE512-Project-Phase2-Template-master/target/scala-2.11/CSE512-Project-Phase2-Template-assembly-0.1.0.jar ...[0m
 [0m[[0m[0mdebug[0m] [0m[0mInput file mappings:[0m
