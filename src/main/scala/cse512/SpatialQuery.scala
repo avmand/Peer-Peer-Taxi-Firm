@@ -1,8 +1,27 @@
 package cse512
-
+import scala.math.{min, pow, sqrt,max}
 import org.apache.spark.sql.SparkSession
 
 object SpatialQuery extends App{
+
+  def ST_Within(pointString1:String, pointString2:String,distance:Double): Boolean ={
+    if(pointString1.isEmpty() || pointString2.isEmpty() || pointString1 == null || pointString2 == null || distance<=0.00)
+      return false
+
+    val pointString1SPlit = pointString1.split(",")
+    val x1 = pointString1SPlit(0).toDouble
+    val y1 = pointString1SPlit(1).toDouble
+
+    val pointString2SPlit = pointString2.split(",")
+    val x2 = pointString2SPlit(0).toDouble
+    val y2 = pointString2SPlit(1).toDouble
+
+    // Euclidean distance between 2 points
+    val distanceBwPoints = sqrt(pow((x1-x2),2) + pow((y1-y2),2))
+
+    if(distanceBwPoints <= distance) return true
+    else return false
+  }
 
   def ST_Contains(queryRectangle: String,pointString: String): Boolean = {
     if (pointString.isEmpty()) {
@@ -26,13 +45,15 @@ object SpatialQuery extends App{
     val btmRX = qRectSplit(2).toDouble
     val btmRY = qRectSplit(3).toDouble
 
-    if ((upLX<=ptX && ptX<=btmRX && upLY<=ptY && ptY<=btmRY) || ( btmRX<=ptX && ptX<=upLX && btmRY<=ptY && ptY<=upLY)) {
-      return true
-    }
+    val minX = min(upLX,btmRX)
+    val maxX = max(upLX,btmRX)
+    val minY = min(upLY,btmRY)
+    val maxY = max(upLY,btmRY)
+
+    // Checking if point lies within rectangle
+    if(ptX>=minX && ptX<=maxX && ptY >= minY && ptY <= maxY)  return true
     return false
   }
-
-
 
   def runRangeQuery(spark: SparkSession, arg1: String, arg2: String): Long = {
 
@@ -44,8 +65,7 @@ object SpatialQuery extends App{
 
     val resultDf = spark.sql("select * from point where ST_Contains('"+arg2+"',point._c0)")
     resultDf.show()
-    //print(resultDf.count())
-    //print("\n")
+
     return resultDf.count()
   }
 
@@ -62,20 +82,17 @@ object SpatialQuery extends App{
 
     val resultDf = spark.sql("select * from rectangle,point where ST_Contains(rectangle._c0,point._c0)")
     resultDf.show()
-    //print(resultDf.count())
-    //print("\n")
 
     return resultDf.count()
   }
 
-  /*
   def runDistanceQuery(spark: SparkSession, arg1: String, arg2: String, arg3: String): Long = {
 
     val pointDf = spark.read.format("com.databricks.spark.csv").option("delimiter","\t").option("header","false").load(arg1);
     pointDf.createOrReplaceTempView("point")
 
     // YOU NEED TO FILL IN THIS USER DEFINED FUNCTION
-    spark.udf.register("ST_Within",(pointString1:String, pointString2:String, distance:Double)=>((true)))
+    spark.udf.register("ST_Within",(pointString1:String, pointString2:String, distance:Double)=>((ST_Within(pointString1,pointString2,distance))))
 
     val resultDf = spark.sql("select * from point where ST_Within(point._c0,'"+arg2+"',"+arg3+")")
     resultDf.show()
@@ -92,10 +109,10 @@ object SpatialQuery extends App{
     pointDf2.createOrReplaceTempView("point2")
 
     // YOU NEED TO FILL IN THIS USER DEFINED FUNCTION
-    spark.udf.register("ST_Within",(pointString1:String, pointString2:String, distance:Double)=>((true)))
+    spark.udf.register("ST_Within",(pointString1:String, pointString2:String, distance:Double)=>((ST_Within(pointString1,pointString2,distance))))
     val resultDf = spark.sql("select * from point1 p1, point2 p2 where ST_Within(p1._c0, p2._c0, "+arg3+")")
     resultDf.show()
 
     return resultDf.count()
-  }*/
+  }
 }
